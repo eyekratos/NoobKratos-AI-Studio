@@ -47,17 +47,17 @@ function prepareVoiceText(){
   if(!source || source.startsWith('Connecting to Gemini') || source.startsWith('Script generation failed')){
     alert('Pehle script generate karo ya full script output mein paste karo.');return;
   }
-  const lines=source.split(/\\r?\\n/);
+  const lines=source.split(/\r?\n/);
   const spoken=[];
   for(let i=0;i<lines.length;i++){
     const line=lines[i].replace(/\\*\\*/g,'').trim();
-    const match=line.match(/Voice[- ]Over(?:\\s*\\([^)]*\\))?\\s*:\\s*(.*)/i);
+    const match=line.match(/Voice[- ]Over(?:\s*\([^)]*\))?\s*:\s*(.*)/i);
     if(match){
       let spokenLine=match[1].trim();
       if(spokenLine) spoken.push(spokenLine);
     }
   }
-  const clean=spoken.join(' ').replace(/\\s+/g,' ').replace(/^["'“]+|["'”]+$/g,'').trim();
+  const clean=spoken.join(' ').replace(/\s+/g,' ').replace(/^["'“]+|["'”]+$/g,'').trim();
   const target=document.getElementById('voiceText');
   if(clean){
     target.value=clean;
@@ -69,7 +69,7 @@ function prepareVoiceText(){
     document.getElementById('voiceStatus')?.remove();
     alert('Spoken dialogue extract ho gaya. Ab voice boxes mein artist select karke generate karo.');
   } else {
-    target.value=source.replace(/#[\\w]+/g,'').replace(/^\\s*(title|hashtags?|script|gameplay action|on-screen text|captions?|sfx|voice-over)\\s*:.*$/gim,'').replace(/\\[[^\\]]*\\]/g,' ').replace(/\\*{1,2}/g,'').replace(/\\s+/g,' ').trim();
+    target.value=source.replace(/#[\w]+/g,'').replace(/^\s*(title|hashtags?|script|gameplay action|on-screen text|captions?|sfx|voice-over)\s*:.*$/gim,'').replace(/\[[^\]]*\]/g,' ').replace(/\*{1,2}/g,'').replace(/\s+/g,' ').trim();
     alert('Voice-Over labels nahi mile. Text box mein spoken words manually check/edit kar lena.');
   }
   if(!document.querySelector('#voiceBoxes .voice-text')?.value.trim()) {
